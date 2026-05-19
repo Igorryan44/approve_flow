@@ -1,4 +1,8 @@
 package com.igor.approve_flow.dtos.request;
 
-public record RegisterUserRequest() {
+public record RegisterUserRequest(
+        String name,
+        String email,
+        String password
+) {
 }
