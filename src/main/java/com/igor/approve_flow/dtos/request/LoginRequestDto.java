@@ -1,6 +1,6 @@
 package com.igor.approve_flow.dtos.request;
 
-public record LoginRequest(
+public record LoginRequestDto(
         String email,
         String password
 ) {

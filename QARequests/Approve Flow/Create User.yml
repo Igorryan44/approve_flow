@@ -1,0 +1,28 @@
+info:
+  name: Create User
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUri}}/api/v1/auth/register"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Igor",
+        "email": "igor@test.com",
+        "password": "teste123"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: baseUri
+      value: http://localhost:8080
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

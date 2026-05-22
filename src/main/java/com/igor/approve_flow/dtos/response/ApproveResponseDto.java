@@ -1,4 +1,4 @@
 package com.igor.approve_flow.dtos.response;
 
-public record LoginResponse() {
+public record ApproveResponseDto() {
 }

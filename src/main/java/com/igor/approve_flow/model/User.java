@@ -2,6 +2,7 @@ package com.igor.approve_flow.model;
 
 import jakarta.persistence.*;
 import org.jspecify.annotations.Nullable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,20 +10,19 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;
     private String password;
-    @OneToMany(mappedBy = "request")
+    @OneToMany(mappedBy = "user")
     private List<ApproveRequest> approveRequests;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdAt;
 
     public User() {

@@ -1,6 +1,7 @@
 package com.igor.approve_flow.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -13,21 +14,22 @@ public class ApproveRequest {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user_id;
+    private User user;
     @Enumerated(value = EnumType.STRING)
     private RequestStatus status;
     private LocalDateTime createdAt;
-    private LocalDateTime las_update;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime last_update;
 
     public ApproveRequest() {
     }
 
-    public ApproveRequest(Long id, User user_id, RequestStatus status, LocalDateTime createdAt, LocalDateTime las_update) {
+    public ApproveRequest(Long id, User user, RequestStatus status, LocalDateTime createdAt, LocalDateTime last_update) {
         this.id = id;
-        this.user_id = user_id;
+        this.user = user;
         this.status = status;
         this.createdAt = createdAt;
-        this.las_update = las_update;
+        this.last_update = last_update;
     }
 
     public Long getId() {
@@ -38,12 +40,12 @@ public class ApproveRequest {
         this.id = id;
     }
 
-    public User getUser_id() {
-        return user_id;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser_id(User user_id) {
-        this.user_id = user_id;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public RequestStatus getStatus() {
@@ -63,10 +65,10 @@ public class ApproveRequest {
     }
 
     public LocalDateTime getLas_update() {
-        return las_update;
+        return last_update;
     }
 
-    public void setLas_update(LocalDateTime las_update) {
-        this.las_update = las_update;
+    public void setLas_update(LocalDateTime last_update) {
+        this.last_update = last_update;
     }
 }
