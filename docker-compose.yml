@@ -1,22 +1,41 @@
 services:
 
-  approve_flow_db:
+  db:
     image: postgres:17
+    container_name: postgres_approve
     restart: always
     ports:
-      - "4532:4532"
+      - "4532:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
     shm_size: 128mb
     env_file:
-      - ".env"
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  approve_flow_app:
+  app:
     build: ./
+    container_name: approve_flow
+    env_file:
+      - .env
     ports:
       - "8080:8080"
+    volumes:
+      - maven_cache:/root/.m2
     depends_on:
-      - approve_flow_db
+      db:
+        condition: service_healthy
+
 
 volumes:
   postgres_data:
+  maven_cache:

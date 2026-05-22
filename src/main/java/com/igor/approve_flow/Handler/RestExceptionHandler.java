@@ -1,5 +1,6 @@
 package com.igor.approve_flow.Handler;
 
+import com.igor.approve_flow.Exceptions.IncorrectPasswordException;
 import com.igor.approve_flow.Exceptions.UserAlreadyException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -23,5 +24,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<RestErrorMessage> userAlreadyException(UserAlreadyException ex){
         RestErrorMessage restErrorMessage = new RestErrorMessage(HttpStatus.CONFLICT, ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(restErrorMessage);
+    }
+
+    @ExceptionHandler(IncorrectPasswordException.class)
+    private ResponseEntity<RestErrorMessage> incorrectPasswordException(IncorrectPasswordException ex){
+        RestErrorMessage restErrorMessage = new RestErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restErrorMessage);
     }
 }

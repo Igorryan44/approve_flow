@@ -1,6 +1,5 @@
 package com.igor.approve_flow.config;
 
-import com.igor.approve_flow.config.TokenConfig;
 import com.igor.approve_flow.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
