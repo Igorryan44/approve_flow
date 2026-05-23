@@ -23,18 +23,22 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<ApproveRequest> approveRequests;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime createdAt;
+    private LocalDateTime created_at;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime last_update;
+
 
     public User() {
     }
 
-    public User(Long id, String name, String email, String password, List<ApproveRequest> approveRequests, LocalDateTime createdAt) {
+    public User(Long id, String name, String email, String password, List<ApproveRequest> approveRequests, LocalDateTime created_at, LocalDateTime last_update) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.approveRequests = approveRequests;
-        this.createdAt = createdAt;
+        this.created_at = created_at;
+        this.last_update = last_update;
     }
 
     public Long getId() {
@@ -65,20 +69,28 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public List<ApproveRequest> getRequests() {
+    public List<ApproveRequest> getApproveRequests() {
         return approveRequests;
     }
 
-    public void setRequests(List<ApproveRequest> approveRequests) {
+    public void setApproveRequests(List<ApproveRequest> approveRequests) {
         this.approveRequests = approveRequests;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getCreated_at() {
+        return created_at;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
+    }
+
+    public LocalDateTime getLast_update() {
+        return last_update;
+    }
+
+    public void setLast_update(LocalDateTime last_update) {
+        this.last_update = last_update;
     }
 
     @Override
