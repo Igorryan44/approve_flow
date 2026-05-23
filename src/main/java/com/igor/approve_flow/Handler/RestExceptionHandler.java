@@ -1,5 +1,6 @@
 package com.igor.approve_flow.Handler;
 
+import com.igor.approve_flow.Exceptions.ApproveNotFoundException;
 import com.igor.approve_flow.Exceptions.IncorrectPasswordException;
 import com.igor.approve_flow.Exceptions.UserAlreadyException;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +29,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(IncorrectPasswordException.class)
     private ResponseEntity<RestErrorMessage> incorrectPasswordException(IncorrectPasswordException ex){
+        RestErrorMessage restErrorMessage = new RestErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restErrorMessage);
+    }
+
+    @ExceptionHandler(ApproveNotFoundException.class)
+    private ResponseEntity<RestErrorMessage> approveNotFoundException(ApproveNotFoundException ex){
         RestErrorMessage restErrorMessage = new RestErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restErrorMessage);
     }

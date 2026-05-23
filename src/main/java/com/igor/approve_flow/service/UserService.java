@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -43,6 +42,10 @@ public class UserService {
         this.tokenConfig = tokenConfig;
     }
 
+    private LocalDateTime dateTiMeNow() {
+        return LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+    }
+
     public RegisterUserResponseDto register(RegisterUserRequestDto request) {
 
         if (userRepository.findByEmail(request.email()).isPresent()){
@@ -56,7 +59,8 @@ public class UserService {
         user.setName(request.name());
         user.setEmail(request.email());
         user.setPassword(pass);
-        user.setCreatedAt(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
+        user.setCreated_at(dateTiMeNow());
+        user.setLast_update(dateTiMeNow());
 
         return mapper.toRegisterDto(userRepository.save(user));
     }
