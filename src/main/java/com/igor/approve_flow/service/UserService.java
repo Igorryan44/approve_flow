@@ -77,7 +77,7 @@ public class UserService {
 
     }
 
-    public List<UserResponseDto> listUsers() {
+    public List<UserResponseDto> listAll() {
         return mapper.toDto(userRepository.findAll());
     }
 
