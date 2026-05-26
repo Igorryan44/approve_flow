@@ -2,3 +2,7 @@ name: Approve Flow Environment
 variables:
   - name: baseUri
     value: http://localhost:8080
+  - secret: true
+    name: Token
+  - name: approveId
+    value: "8"

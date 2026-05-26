@@ -1,0 +1,30 @@
+info:
+  name: Create Approve
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseUri}}/api/v1/approve"
+  body:
+    type: json
+    data: |-
+      {
+        "request_name": "Aprovação de Crédito",
+        "user_id": 1,
+        "assignees": ["Igor"]
+      }
+  auth:
+    type: bearer
+    token: "{{Token}}"
+
+runtime:
+  variables:
+    - name: baseUri
+      value: http://localhost:8080
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

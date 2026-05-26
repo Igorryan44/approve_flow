@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface ApproveRequestRepository extends JpaRepository<ApproveRequest, Long> {
 
-    Optional<List<ApproveRequest>> listByStatus(RequestStatus status);
+    List<ApproveRequest> findByStatus(RequestStatus status);
 }

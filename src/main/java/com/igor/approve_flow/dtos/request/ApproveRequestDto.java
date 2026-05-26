@@ -1,15 +1,10 @@
 package com.igor.approve_flow.dtos.request;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
+import java.util.List;
 
 public record ApproveRequestDto(
-        String requestName,
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        LocalDateTime created_at,
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        LocalDateTime last_update
-
+        String request_name,
+        Long user_id,
+        List<String> assignees
 ) {
 }

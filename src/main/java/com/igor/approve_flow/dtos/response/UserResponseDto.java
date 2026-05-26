@@ -9,5 +9,5 @@ public record UserResponseDto(
         String name,
         String email,
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        LocalDateTime createdAt
+        LocalDateTime created_at
 ) {}
