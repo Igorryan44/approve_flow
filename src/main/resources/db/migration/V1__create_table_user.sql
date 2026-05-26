@@ -3,5 +3,6 @@ CREATE TABLE users(
     name VARCHAR(256) NOT NULL,
     email VARCHAR(256) NOT NULL,
     password VARCHAR(256) NOT NULL,
-    created_at TIMESTAMP
+    created_at TIMESTAMP,
+    last_update TIMESTAMP
 );

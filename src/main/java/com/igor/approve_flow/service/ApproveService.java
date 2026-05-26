@@ -6,32 +6,40 @@ import com.igor.approve_flow.dtos.response.ApproveResponseDto;
 import com.igor.approve_flow.mapper.ApproveMapper;
 import com.igor.approve_flow.model.ApproveRequest;
 import com.igor.approve_flow.model.RequestStatus;
+import com.igor.approve_flow.model.User;
 import com.igor.approve_flow.repository.ApproveRequestRepository;
+import com.igor.approve_flow.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
+@Service
 public class ApproveService {
 
     private final ApproveRequestRepository approveRequestRepository;
+    private final UserRepository userRepository;
     private final ApproveMapper approveMapper;
 
-    public ApproveService(ApproveRequestRepository approveRequestRepository, ApproveMapper approveMapper) {
+    public ApproveService(ApproveRequestRepository approveRequestRepository, ApproveMapper approveMapper, UserRepository userRepository) {
         this.approveRequestRepository = approveRequestRepository;
         this.approveMapper = approveMapper;
-    }
-
-    private LocalDateTime dateTiMeNow() {
-        return LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+        this.userRepository = userRepository;
     }
 
     public ApproveResponseDto createApprove(ApproveRequestDto request) {
         ApproveRequest newApprove = new  ApproveRequest();
 
-        newApprove.setRequestName(request.requestName());
-        newApprove.setCreated_at(dateTiMeNow());
-        newApprove.setLast_update(dateTiMeNow());
+        User user = userRepository.findById(request.user_id()).orElseThrow(EntityNotFoundException::new);
+
+        newApprove.setRequest_name(request.request_name());
+        newApprove.setUser(user);
+        newApprove.setStatus(RequestStatus.REQUESTED);
+        newApprove.setAssignees(request.assignees());
+        newApprove.setCreated_at(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
+        newApprove.setLast_update(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
 
         return approveMapper.toDto(approveRequestRepository.save(newApprove));
     }
@@ -40,8 +48,12 @@ public class ApproveService {
         return approveMapper.toDto(approveRequestRepository.findAll());
     }
 
-    public List<ApproveResponseDto> listByStatus(RequestStatus status) {
-        return approveMapper.toDto(approveRequestRepository.listByStatus(status).orElseThrow(ApproveNotFoundException::new));
+    public List<ApproveResponseDto> findByStatus(RequestStatus status) {
+        List<ApproveRequest> requests = approveRequestRepository.findByStatus(status);
+        if (requests.isEmpty()) {
+            throw new ApproveNotFoundException();
+        }
+        return approveMapper.toDto(requests);
     }
 
     public ApproveResponseDto findApproveById(Long id) {
@@ -49,20 +61,18 @@ public class ApproveService {
     }
 
     public ApproveResponseDto completeApprove(Long id) {
-        var approve = approveRequestRepository.findById(id).orElseThrow(ApproveNotFoundException::new);
+        ApproveRequest approve = approveRequestRepository.findById(id).orElseThrow(ApproveNotFoundException::new);
         approve.setStatus(RequestStatus.COMPLETED);
-        approve.setLast_update(dateTiMeNow());
+        approve.setLast_update(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
         approveRequestRepository.save(approve);
         return approveMapper.toDto(approve);
     }
 
     public void cancelApproveById(Long id) {
-        var approve =  approveRequestRepository.findById(id).orElseThrow(ApproveNotFoundException::new);
+        ApproveRequest approve =  approveRequestRepository.findById(id).orElseThrow(ApproveNotFoundException::new);
         approve.setStatus(RequestStatus.CANCELED);
-        approve.setLast_update(dateTiMeNow());
+        approve.setLast_update(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
         approveRequestRepository.save(approve);
-
-        approveRequestRepository.deleteById(id);
     }
 
 }

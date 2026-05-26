@@ -3,11 +3,9 @@ package com.igor.approve_flow.controller;
 import com.igor.approve_flow.dtos.request.UpdatePasswordDto;
 import com.igor.approve_flow.dtos.response.UserResponseDto;
 import com.igor.approve_flow.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,7 +24,20 @@ public class UserController {
         return ResponseEntity.ok(userService.updatePassword(id, password, new_password));
     }
 
+    @GetMapping
     public ResponseEntity<List<UserResponseDto>> listAllUsers() {
         return ResponseEntity.ok(userService.listAll());
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity<UserResponseDto> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        userService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }

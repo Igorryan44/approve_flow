@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "approve_request")
@@ -12,12 +13,11 @@ public class ApproveRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String requestName;
-
+    private String request_name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+    private List<String> assignees;
     @Enumerated(value = EnumType.STRING)
     private RequestStatus status;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -28,11 +28,12 @@ public class ApproveRequest {
     public ApproveRequest() {
     }
 
-    public ApproveRequest(Long id, String requestName, User user, RequestStatus status, LocalDateTime created_at, LocalDateTime last_update) {
+    public ApproveRequest(Long id, String request_name, User user, List<String> assignees, RequestStatus status, LocalDateTime created_at, LocalDateTime last_update) {
         this.id = id;
-        this.requestName = requestName;
+        this.request_name = request_name;
         this.user = user;
-        this.status = RequestStatus.REQUESTED;
+        this.assignees = assignees;
+        this.status = status;
         this.created_at = created_at;
         this.last_update = last_update;
     }
@@ -45,12 +46,12 @@ public class ApproveRequest {
         this.id = id;
     }
 
-    public String getRequestName() {
-        return requestName;
+    public String getRequest_name() {
+        return request_name;
     }
 
-    public void setRequestName(String requestName) {
-        this.requestName = requestName;
+    public void setRequest_name(String request_name) {
+        this.request_name = request_name;
     }
 
     public User getUser() {
@@ -59,6 +60,14 @@ public class ApproveRequest {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<String> getAssignees() {
+        return assignees;
+    }
+
+    public void setAssignees(List<String> assignees) {
+        this.assignees = assignees;
     }
 
     public RequestStatus getStatus() {
