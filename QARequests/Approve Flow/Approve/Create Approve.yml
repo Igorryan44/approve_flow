@@ -12,7 +12,7 @@ http:
       {
         "request_name": "Aprovação de Crédito",
         "user_id": 1,
-        "assignees": ["Igor"]
+        "assignees": [2]
       }
   auth:
     type: bearer

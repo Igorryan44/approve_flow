@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "approve_request")
@@ -17,7 +18,13 @@ public class ApproveRequest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    private List<String> assignees;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "approve_request_assignees",
+        joinColumns = @JoinColumn(name = "request_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> assignees = new HashSet<>();
     @Enumerated(value = EnumType.STRING)
     private RequestStatus status;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -28,7 +35,7 @@ public class ApproveRequest {
     public ApproveRequest() {
     }
 
-    public ApproveRequest(Long id, String request_name, User user, List<String> assignees, RequestStatus status, LocalDateTime created_at, LocalDateTime last_update) {
+    public ApproveRequest(Long id, String request_name, User user, Set<User> assignees, RequestStatus status, LocalDateTime created_at, LocalDateTime last_update) {
         this.id = id;
         this.request_name = request_name;
         this.user = user;
@@ -62,11 +69,11 @@ public class ApproveRequest {
         this.user = user;
     }
 
-    public List<String> getAssignees() {
+    public Set<User> getAssignees() {
         return assignees;
     }
 
-    public void setAssignees(List<String> assignees) {
+    public void setAssignees(Set<User> assignees) {
         this.assignees = assignees;
     }
 

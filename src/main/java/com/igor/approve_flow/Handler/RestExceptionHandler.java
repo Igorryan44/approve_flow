@@ -2,6 +2,7 @@ package com.igor.approve_flow.Handler;
 
 import com.igor.approve_flow.Exceptions.ApproveNotFoundException;
 import com.igor.approve_flow.Exceptions.IncorrectPasswordException;
+import com.igor.approve_flow.Exceptions.InvalidArgumentException;
 import com.igor.approve_flow.Exceptions.UserAlreadyException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     private ResponseEntity<RestErrorMessage> authenticationException(AuthenticationException ex){
+        RestErrorMessage restErrorMessage = new RestErrorMessage(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(restErrorMessage);
+    }
+
+    @ExceptionHandler(InvalidArgumentException.class)
+    private ResponseEntity<RestErrorMessage> invalidArgumentException(InvalidArgumentException ex){
         RestErrorMessage restErrorMessage = new RestErrorMessage(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(restErrorMessage);
     }
