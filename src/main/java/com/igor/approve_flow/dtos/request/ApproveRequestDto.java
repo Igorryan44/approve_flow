@@ -5,6 +5,6 @@ import java.util.List;
 public record ApproveRequestDto(
         String request_name,
         Long user_id,
-        List<String> assignees
+        List<Long> assignees
 ) {
 }

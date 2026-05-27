@@ -12,7 +12,7 @@ public record ApproveResponseDto(
         Long id,
         String request_name,
         Long user_id,
-        List<String> assignees,
+        List<Long> assignees,
         @Enumerated(EnumType.STRING)
         RequestStatus status,
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

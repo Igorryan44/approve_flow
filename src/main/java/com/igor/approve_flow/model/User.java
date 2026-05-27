@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -22,6 +23,8 @@ public class User implements UserDetails {
     private String password;
     @OneToMany(mappedBy = "user")
     private List<ApproveRequest> approveRequests;
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "assignees")
+    private Set<ApproveRequest> approveRequestsAssigned;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime created_at;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -31,12 +34,13 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long id, String name, String email, String password, List<ApproveRequest> approveRequests, LocalDateTime created_at, LocalDateTime last_update) {
+    public User(Long id, String name, String email, String password, List<ApproveRequest> approveRequests, Set<ApproveRequest> approveRequestsAssigned, LocalDateTime created_at, LocalDateTime last_update) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.approveRequests = approveRequests;
+        this.approveRequestsAssigned = approveRequestsAssigned;
         this.created_at = created_at;
         this.last_update = last_update;
     }
@@ -75,6 +79,14 @@ public class User implements UserDetails {
 
     public void setApproveRequests(List<ApproveRequest> approveRequests) {
         this.approveRequests = approveRequests;
+    }
+
+    public Set<ApproveRequest> getApproveRequestsAssigned() {
+        return approveRequestsAssigned;
+    }
+
+    public void setApproveRequestsAssigned(Set<ApproveRequest> approveRequestsAssigned) {
+        this.approveRequestsAssigned = approveRequestsAssigned;
     }
 
     public LocalDateTime getCreated_at() {

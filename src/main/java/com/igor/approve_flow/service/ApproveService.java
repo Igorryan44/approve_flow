@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ApproveService {
@@ -34,10 +37,18 @@ public class ApproveService {
 
         User user = userRepository.findById(request.user_id()).orElseThrow(EntityNotFoundException::new);
 
+        List<Long> approveListIds = request.assignees();
+        Set<User> assignessList = new HashSet<>();
+
+        for  (Long approveListId : approveListIds) {
+            User approveRequest =  userRepository.findById(approveListId).orElseThrow(EntityNotFoundException::new);
+            assignessList.add(approveRequest);
+        }
+
         newApprove.setRequest_name(request.request_name());
         newApprove.setUser(user);
+        newApprove.setAssignees(assignessList);
         newApprove.setStatus(RequestStatus.REQUESTED);
-        newApprove.setAssignees(request.assignees());
         newApprove.setCreated_at(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
         newApprove.setLast_update(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
 
