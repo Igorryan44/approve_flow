@@ -1,0 +1,22 @@
+info:
+  name: Delete Approve
+  type: http
+  seq: 1
+
+http:
+  method: DELETE
+  url: "{{baseUri}}/api/v1/approve/{{approveId}}"
+  auth:
+    type: bearer
+    token: "{{Token}}"
+
+runtime:
+  variables:
+    - name: baseUri
+      value: http://localhost:8080
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

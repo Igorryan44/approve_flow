@@ -1,19 +1,18 @@
 info:
-  name: Create Approve
+  name: Get Approve by Status
   type: http
-  seq: 3
+  seq: 1
 
 http:
-  method: POST
-  url: "{{baseUri}}/api/v1/approve"
+  method: GET
+  url: "{{baseUri}}/api/v1/approve/status?status=CANCELED"
+  params:
+    - name: status
+      value: CANCELED
+      type: query
   body:
     type: json
-    data: |-
-      {
-        "request_name": "Aprovação de Crédito",
-        "user_id": 1,
-        "assignees": ["Igor"]
-      }
+    data: ""
   auth:
     type: bearer
     token: "{{Token}}"

@@ -1,0 +1,22 @@
+info:
+  name: Find User by Id
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: "{{baseUri}}/api/v1/user/{{userId}}"
+  auth:
+    type: bearer
+    token: "{{Token}}"
+
+runtime:
+  variables:
+    - name: baseUri
+      value: http://localhost:8080
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
