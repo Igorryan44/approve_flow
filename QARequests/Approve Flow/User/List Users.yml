@@ -1,14 +1,11 @@
 info:
-  name: Delete Approve
+  name: List Users
   type: http
-  seq: 4
+  seq: 3
 
 http:
-  method: DELETE
-  url: "{{baseUri}}/api/v1/approve/{{approveId}}"
-  body:
-    type: json
-    data: ""
+  method: GET
+  url: "{{baseUri}}/api/v1/user"
   auth:
     type: bearer
     token: "{{Token}}"

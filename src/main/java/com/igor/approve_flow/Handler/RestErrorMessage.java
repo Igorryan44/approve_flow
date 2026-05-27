@@ -1,23 +1,27 @@
 package com.igor.approve_flow.Handler;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDateTime;
 
 public class RestErrorMessage {
 
-    private HttpStatus httpStatus;
+    private int status;
     private String message;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime timestamp;
 
-    public RestErrorMessage(HttpStatus httpStatus, String message) {
-        this.httpStatus = httpStatus;
+    public RestErrorMessage(int status, String message, LocalDateTime timestamp) {
+        this.status = status;
         this.message = message;
+        this.timestamp = timestamp;
     }
 
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
+    public int getStatus() {
+        return status;
     }
 
-    public void setHttpStatus(HttpStatus httpStatus) {
-        this.httpStatus = httpStatus;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getMessage() {
@@ -26,5 +30,13 @@ public class RestErrorMessage {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }
