@@ -22,9 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -44,12 +42,12 @@ public class UserService {
         this.tokenConfig = tokenConfig;
     }
 
+    private LocalDateTime now() {
+        return LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+    }
+
     public RegisterUserResponseDto register(RegisterUserRequestDto request) {
-
-        if (userRepository.findByEmail(request.email()).isPresent()){
-            throw new UserAlreadyException();
-        }
-
+        userRepository.findByEmail(request.email()).orElseThrow(UserAlreadyException::new);
         User user =  new User();
 
         var pass = passwordEncoder.encode(request.password());
@@ -57,8 +55,8 @@ public class UserService {
         user.setName(request.name());
         user.setEmail(request.email());
         user.setPassword(pass);
-        user.setCreated_at(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
-        user.setLast_update(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
+        user.setCreated_at(now());
+        user.setLast_update(now());
 
         return mapper.toRegisterDto(userRepository.save(user));
     }
@@ -92,22 +90,23 @@ public class UserService {
     }
 
     public void deleteById(Long id) {
-        if (userRepository.findById(id).isPresent()) {
-            userRepository.deleteById(id);
-        } throw new EntityNotFoundException();
+        userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        userRepository.deleteById(id);
     }
 
     public UpdatePasswordDto updatePassword(Long id, String password, String new_password) {
 
         User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        var passwordEncoded = passwordEncoder.encode(password);
 
-        var oldPassword = user.getPassword();
-        if (!oldPassword.equals(new_password)) {
-            var newPassword = passwordEncoder.encode(password);
+        var passwordDb = user.getPassword();
+        if (password != null && password.equals(passwordEncoded)) {
+
+            var newPassword = passwordEncoder.encode(new_password);
             user.setPassword(newPassword);
             userRepository.save(user);
 
-            return new UpdatePasswordDto(oldPassword, newPassword);
+            return new UpdatePasswordDto(passwordDb, newPassword);
         }
         throw new IncorrectPasswordException();
     }

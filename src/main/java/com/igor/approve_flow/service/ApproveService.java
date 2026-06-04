@@ -14,10 +14,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class ApproveService {
@@ -37,13 +39,10 @@ public class ApproveService {
 
         User user = userRepository.findById(request.user_id()).orElseThrow(EntityNotFoundException::new);
 
-        List<Long> approveListIds = request.assignees();
-        Set<User> assignessList = new HashSet<>();
-
-        for  (Long approveListId : approveListIds) {
-            User approveRequest =  userRepository.findById(approveListId).orElseThrow(EntityNotFoundException::new);
-            assignessList.add(approveRequest);
-        }
+        Set<User> assignessList = request.assignees().stream()
+                .filter(Objects::nonNull)
+                .map(id -> userRepository.findById(id).orElseThrow(EntityNotFoundException::new))
+                .collect(Collectors.toSet());
 
         newApprove.setRequest_name(request.request_name());
         newApprove.setUser(user);
