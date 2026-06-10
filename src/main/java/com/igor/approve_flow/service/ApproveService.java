@@ -13,13 +13,12 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
+import static com.igor.approve_flow.utils.AppConstants.BRAZIL_ZONE;
 
 @Service
 public class ApproveService {
@@ -48,8 +47,8 @@ public class ApproveService {
         newApprove.setUser(user);
         newApprove.setAssignees(assignessList);
         newApprove.setStatus(RequestStatus.REQUESTED);
-        newApprove.setCreated_at(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
-        newApprove.setLast_update(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
+        newApprove.setCreated_at(LocalDateTime.now(BRAZIL_ZONE));
+        newApprove.setLast_update(LocalDateTime.now(BRAZIL_ZONE));
 
         return approveMapper.toDto(approveRequestRepository.save(newApprove));
     }
@@ -73,7 +72,7 @@ public class ApproveService {
     public ApproveResponseDto completeApprove(Long id) {
         ApproveRequest approve = approveRequestRepository.findById(id).orElseThrow(ApproveNotFoundException::new);
         approve.setStatus(RequestStatus.COMPLETED);
-        approve.setLast_update(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
+        approve.setLast_update(LocalDateTime.now(BRAZIL_ZONE));
         approveRequestRepository.save(approve);
         return approveMapper.toDto(approve);
     }
@@ -81,7 +80,7 @@ public class ApproveService {
     public void cancelApproveById(Long id) {
         ApproveRequest approve =  approveRequestRepository.findById(id).orElseThrow(ApproveNotFoundException::new);
         approve.setStatus(RequestStatus.CANCELED);
-        approve.setLast_update(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
+        approve.setLast_update(LocalDateTime.now(BRAZIL_ZONE));
         approveRequestRepository.save(approve);
     }
 

@@ -21,8 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
+
+import static com.igor.approve_flow.utils.AppConstants.BRAZIL_ZONE;
 
 @Service
 public class UserService {
@@ -42,10 +43,6 @@ public class UserService {
         this.tokenConfig = tokenConfig;
     }
 
-    private LocalDateTime now() {
-        return LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
-    }
-
     public RegisterUserResponseDto register(RegisterUserRequestDto request) {
         userRepository.findByEmail(request.email()).orElseThrow(UserAlreadyException::new);
         User user =  new User();
@@ -55,8 +52,8 @@ public class UserService {
         user.setName(request.name());
         user.setEmail(request.email());
         user.setPassword(pass);
-        user.setCreated_at(now());
-        user.setLast_update(now());
+        user.setCreated_at(LocalDateTime.now(BRAZIL_ZONE));
+        user.setLast_update(LocalDateTime.now(BRAZIL_ZONE));
 
         return mapper.toRegisterDto(userRepository.save(user));
     }
@@ -97,10 +94,11 @@ public class UserService {
     public UpdatePasswordDto updatePassword(Long id, String password, String new_password) {
 
         User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        var passwordEncoded = passwordEncoder.encode(password);
 
+        var passwordEncoded = passwordEncoder.encode(password);
         var passwordDb = user.getPassword();
-        if (password != null && password.equals(passwordEncoded)) {
+
+        if (passwordEncoder.matches(password, passwordEncoded)) {
 
             var newPassword = passwordEncoder.encode(new_password);
             user.setPassword(newPassword);
