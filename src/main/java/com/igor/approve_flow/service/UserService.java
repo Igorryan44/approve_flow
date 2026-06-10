@@ -98,7 +98,7 @@ public class UserService {
         var passwordEncoded = passwordEncoder.encode(password);
         var passwordDb = user.getPassword();
 
-        if (passwordEncoder.matches(password, passwordEncoded)) {
+        if (passwordEncoder.matches(passwordDb, passwordEncoded)) {
 
             var newPassword = passwordEncoder.encode(new_password);
             user.setPassword(newPassword);
