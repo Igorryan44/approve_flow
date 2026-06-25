@@ -57,6 +57,10 @@ public class ApproveService {
         return approveMapper.toDto(approveRequestRepository.findAll());
     }
 
+    public List<ApproveResponseDto> listActiveApproves() {
+        return approveMapper.toDto(approveRequestRepository.findByStatusInProgress());
+    }
+
     public List<ApproveResponseDto> findByStatus(RequestStatus status) {
         List<ApproveRequest> requests = approveRequestRepository.findByStatus(status);
         if (requests.isEmpty()) {

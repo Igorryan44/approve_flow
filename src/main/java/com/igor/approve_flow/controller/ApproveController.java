@@ -36,6 +36,11 @@ public class ApproveController {
         return ResponseEntity.ok(approveService.findByStatus(status));
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<ApproveResponseDto>> listActiveApproves() {
+        return ResponseEntity.ok(approveService.listActiveApproves());
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<ApproveResponseDto> findApproveById(@PathVariable Long id) {
         return ResponseEntity.ok(approveService.findApproveById(id));

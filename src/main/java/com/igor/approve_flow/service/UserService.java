@@ -21,7 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.igor.approve_flow.utils.AppConstants.BRAZIL_ZONE;
 
@@ -41,37 +44,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenConfig = tokenConfig;
-    }
-
-    public RegisterUserResponseDto register(RegisterUserRequestDto request) {
-        userRepository.findByEmail(request.email()).orElseThrow(UserAlreadyException::new);
-        User user =  new User();
-
-        var pass = passwordEncoder.encode(request.password());
-
-        user.setName(request.name());
-        user.setEmail(request.email());
-        user.setPassword(pass);
-        user.setCreated_at(LocalDateTime.now(BRAZIL_ZONE));
-        user.setLast_update(LocalDateTime.now(BRAZIL_ZONE));
-
-        return mapper.toRegisterDto(userRepository.save(user));
-    }
-
-    public LoginResponseDto login(LoginRequestDto request) {
-        try {
-            UsernamePasswordAuthenticationToken userAndPass = new UsernamePasswordAuthenticationToken(request.email(), request.password());
-            Authentication authentication = authenticationManager.authenticate(userAndPass);
-
-            User user = (User) authentication.getPrincipal();
-            String token = tokenConfig.generateToken(user);
-
-            return new LoginResponseDto(token);
-
-        } catch (Exception e) {
-            throw new InvalidArgumentException();
-        }
-
     }
 
     public List<UserResponseDto> listAll() {
@@ -95,10 +67,9 @@ public class UserService {
 
         User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-        var passwordEncoded = passwordEncoder.encode(password);
         var passwordDb = user.getPassword();
 
-        if (passwordEncoder.matches(passwordDb, passwordEncoded)) {
+        if (passwordEncoder.matches(password, passwordDb)) {
 
             var newPassword = passwordEncoder.encode(new_password);
             user.setPassword(newPassword);

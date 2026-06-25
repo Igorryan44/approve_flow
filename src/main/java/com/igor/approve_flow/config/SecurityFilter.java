@@ -29,7 +29,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var token = this.recoverToken(request).orElseThrow(InvalidTokenException::new);
+        String token = this.recoverToken(request).orElseThrow(InvalidTokenException::new);
 
         var email = tokenConfig.validateToken(token);
         UserDetails user = userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
@@ -40,6 +40,9 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     private Optional<String> recoverToken(HttpServletRequest request) {
-        return request.getHeader("Authorization").describeConstable().orElseThrow().replace("Bearer ", "").describeConstable();
+
+        return Optional.ofNullable(request.getHeader("Authorization"))
+                .map(t -> t.replace("Bearer ", ""))
+                .filter(String::isEmpty);
     }
 }
