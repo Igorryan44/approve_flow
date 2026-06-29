@@ -2,8 +2,9 @@ package com.igor.approve_flow.controller;
 
 import com.igor.approve_flow.dtos.request.ApproveRequestDto;
 import com.igor.approve_flow.dtos.response.ApproveResponseDto;
+import com.igor.approve_flow.interfaces.ApproveService;
 import com.igor.approve_flow.model.RequestStatus;
-import com.igor.approve_flow.service.ApproveService;
+import com.igor.approve_flow.service.ApproveServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,11 @@ public class ApproveController {
     @GetMapping("/status")
     public ResponseEntity<List<ApproveResponseDto>> findByStatus(@RequestParam(required = true) RequestStatus status) {
         return ResponseEntity.ok(approveService.findByStatus(status));
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<ApproveResponseDto>> listActiveApproves() {
+        return ResponseEntity.ok(approveService.listActiveApproves());
     }
 
     @GetMapping("{id}")
