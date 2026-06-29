@@ -7,6 +7,7 @@ import com.igor.approve_flow.dtos.request.LoginRequestDto;
 import com.igor.approve_flow.dtos.request.RegisterUserRequestDto;
 import com.igor.approve_flow.dtos.response.LoginResponseDto;
 import com.igor.approve_flow.dtos.response.RegisterUserResponseDto;
+import com.igor.approve_flow.interfaces.AuthService;
 import com.igor.approve_flow.mapper.UserMapper;
 import com.igor.approve_flow.model.User;
 import com.igor.approve_flow.repository.UserRepository;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 import static com.igor.approve_flow.utils.AppConstants.BRAZIL_ZONE;
 
 @Service
-public class AuthService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final UserMapper mapper;
@@ -29,7 +30,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final TokenConfig tokenConfig;
 
-    public AuthService(UserRepository userRepository, UserMapper mapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenConfig tokenConfig) {
+    public AuthServiceImpl(UserRepository userRepository, UserMapper mapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenConfig tokenConfig) {
         this.userRepository = userRepository;
         this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
@@ -37,6 +38,7 @@ public class AuthService {
         this.tokenConfig = tokenConfig;
     }
 
+    @Override
     public RegisterUserResponseDto register(RegisterUserRequestDto request) {
 
         userRepository.findByEmail(request.email())
@@ -57,6 +59,7 @@ public class AuthService {
         return mapper.toRegisterDto(userRepository.save(user));
     }
 
+    @Override
     public LoginResponseDto login(LoginRequestDto request) {
         try {
             UsernamePasswordAuthenticationToken userAndPass = new UsernamePasswordAuthenticationToken(request.email(), request.password());

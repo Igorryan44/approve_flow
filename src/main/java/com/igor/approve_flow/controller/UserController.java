@@ -2,7 +2,8 @@ package com.igor.approve_flow.controller;
 
 import com.igor.approve_flow.dtos.request.UpdatePasswordDto;
 import com.igor.approve_flow.dtos.response.UserResponseDto;
-import com.igor.approve_flow.service.UserService;
+import com.igor.approve_flow.interfaces.UserService;
+import com.igor.approve_flow.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
